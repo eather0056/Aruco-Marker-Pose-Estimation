@@ -83,7 +83,7 @@ def main():
     this_aruco_parameters = cv2.aruco.DetectorParameters_create()
     
     # Start the video stream
-    cap = cv2.VideoCapture(-2)
+    cap = cv2.VideoCapture(4)
     
     # Create a named window and set the window size
     cv2.namedWindow('frame', cv2.WINDOW_NORMAL)

@@ -96,8 +96,10 @@ Reboot the system.
 ## Running MAVROS and Launch Files on Laptop
 
 ### 1. Connect the Gamepad
-Ensure the gamepad is connected to your laptop.
-
+Ensure the gamepad is connected to your laptop. Source the setup.bash
+```sh
+source /home/eth/ros2_ws/src/install/setup.bash
+```
 ### 2. Run the Launch File
 Run the provided launch file to start the MAVROS, joy, and listenMIR nodes.
 ```sh
@@ -118,6 +120,11 @@ source install/setup.bash
 Use the provided launch file to display camera video.
 ```sh
 ros2 launch autonomous_rov video.launch.py
+```
+Check the list of your laptop camera.
+```sh
+sudo apt-get install v4l-utils
+v4l2-ctl --list-devices
 ```
 
 ### 5. Run QGroundControl (QGC) Interface
