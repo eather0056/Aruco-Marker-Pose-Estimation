@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from __future__ import print_function
 import cv2
@@ -59,6 +59,42 @@ def euler_from_quaternion(x, y, z, w):
     
     return roll_x, pitch_y, yaw_z # in radians
 
+def calculate_robot_position(marker_positions):
+    """
+    Calculate the robot's position based on detected markers 1 and 2.
+    """
+    if 1 in marker_positions and 2 in marker_positions:
+        x1, y1, z1 = marker_positions[1]
+        x2, y2, z2 = marker_positions[2]
+        robot_x = (x1 + x2) / 2
+        robot_y = (y1 + y2) / 2
+        robot_z = (z1 + z2) / 2
+    elif 1 in marker_positions:
+        robot_x, robot_y, robot_z = marker_positions[1]
+    elif 2 in marker_positions:
+        robot_x, robot_y, robot_z = marker_positions[2]
+    else:
+        robot_x, robot_y, robot_z = None, None, None
+    
+    return robot_x, robot_y, robot_z
+
+def calculate_distance_and_orientation(robot_pos, goal_pos, robot_yaw, goal_yaw):
+    """
+    Calculate the distance and orientation difference between the robot and the goal.
+    """
+    if robot_pos is None or goal_pos is None:
+        return None, None
+    
+    distance = np.linalg.norm(np.array(robot_pos) - np.array(goal_pos))
+    
+    # Calculate yaw difference in degrees (0 to 360)
+    yaw_diff = math.degrees(robot_yaw - goal_yaw) % 360
+    if yaw_diff < 0:
+        yaw_diff += 360
+    
+    return distance, yaw_diff
+
+
 def main():
     """
     Main method of the program.
@@ -106,6 +142,8 @@ def main():
             cameraMatrix=mtx, distCoeff=dst)
         
         marker_positions = {}
+        robot_yaw = goal_yaw = None
+        goal_position = None
         
         # Check that at least one ArUco marker was detected
         if marker_ids is not None:
@@ -154,6 +192,12 @@ def main():
                 roll_x = math.degrees(roll_x)
                 pitch_y = math.degrees(pitch_y)
                 yaw_z = math.degrees(yaw_z)
+
+                if marker_id[0] in [1, 2]:
+                    robot_yaw = yaw_z
+                elif marker_id[0] == 3:
+                    goal_yaw = yaw_z
+                    goal_position = (transform_translation_x, transform_translation_y, transform_translation_z)
                 
                 print(f"Marker ID: {marker_id[0]}")
                 print("Position with respect to camera frame center:")
@@ -165,17 +209,19 @@ def main():
                 # Draw the axes on the marker
                 cv2.aruco.drawAxis(frame, mtx, dst, rvecs[i], tvecs[i], 0.05)
             
-            # Calculate distances between each pair of markers
-            marker_ids_list = list(marker_positions.keys())
-            for j in range(len(marker_ids_list)):
-                for k in range(j + 1, len(marker_ids_list)):
-                    id1 = marker_ids_list[j]
-                    id2 = marker_ids_list[k]
-                    pos1 = marker_positions[id1]
-                    pos2 = marker_positions[id2]
-                    distance = np.linalg.norm(np.array(pos1) - np.array(pos2))
-                    print(f"Distance between Marker {id1} and Marker {id2}: {distance:.2f} m")
-            
+        # Calculate robot position
+        robot_position = calculate_robot_position(marker_positions)
+        
+        # If robot position and goal position are both available, calculate distance and yaw difference
+        if robot_position is not None and goal_position is not None:
+            distance, yaw_diff = calculate_distance_and_orientation(robot_position, goal_position, robot_yaw, goal_yaw)
+            if distance is not None and yaw_diff is not None:
+                print(f"Distance to goal: {distance:.2f} m, Yaw difference: {yaw_diff:.2f} degrees")
+            else:
+                print("Failed to calculate distance or yaw difference.")
+        else:
+            print("Robot position or goal position not detected.")
+        
         # Display the resulting frame
         cv2.imshow('frame', frame)
         
@@ -187,7 +233,7 @@ def main():
     # Close down the video stream
     cap.release()
     cv2.destroyAllWindows()
-    
+
 if __name__ == '__main__':
     print(__doc__)
     main()
