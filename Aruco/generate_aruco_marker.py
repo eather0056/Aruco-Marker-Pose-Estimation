@@ -1,21 +1,8 @@
 #!/usr/bin/env python3
-  
-'''
-Welcome to the ArUco Marker Generator!
-  
-This program:
-  - Generates ArUco markers using OpenCV and Python
-'''
-  
 from __future__ import print_function # Python 2/3 compatibility
 import cv2 # Import the OpenCV library
 import numpy as np # Import Numpy library
-  
-# Project: ArUco Marker Generator
-# Date created: 12/17/2021
-# Python version: 3.8
-# Reference: https://www.pyimagesearch.com/2020/12/14/generating-aruco-markers-with-opencv-and-python/
- 
+
 desired_aruco_dictionary = "DICT_7X7_50"
 aruco_marker_id = 4
 output_filename = "DICT_7X7_50_4.png"

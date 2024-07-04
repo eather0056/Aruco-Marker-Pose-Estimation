@@ -1,20 +1,7 @@
 #!/usr/bin/env python
-  
-'''
-Welcome to the ArUco Marker Detector!
-  
-This program:
-  - Detects ArUco markers using OpenCV and Python
-'''
-  
 from __future__ import print_function # Python 2/3 compatibility
 import cv2 # Import the OpenCV library
 import numpy as np # Import Numpy library
- 
-# Project: ArUco Marker Detector
-# Date created: 12/18/2021
-# Python version: 3.8
-# Reference: https://www.pyimagesearch.com/2020/12/21/detecting-aruco-markers-with-opencv-and-python/
  
 desired_aruco_dictionary = "DICT_ARUCO_ORIGINAL"
  
