@@ -1,21 +1,9 @@
 #!/usr/bin/env python3
-  
-'''
-Welcome to the ArUco Marker Pose Estimator!
-  
-This program:
-  - Estimates the pose of an ArUco Marker
-'''
-  
 from __future__ import print_function # Python 2/3 compatibility
 import cv2 # Import the OpenCV library
 import numpy as np # Import Numpy library
 from scipy.spatial.transform import Rotation as R
 import math # Math library
- 
-# Project: ArUco Marker Pose Estimator
-# Date created: 12/21/2021
-# Python version: 3.8
  
 # Dictionary that was used to generate the ArUco marker
 aruco_dictionary_name = "DICT_7X7_50"
