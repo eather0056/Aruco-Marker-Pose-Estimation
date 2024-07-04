@@ -1,14 +1,24 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
   
-from __future__ import print_function 
-import cv2 
-import numpy as np 
+'''
+Welcome to the ArUco Marker Pose Estimator!
+  
+This program:
+  - Estimates the pose of an ArUco Marker
+'''
+  
+from __future__ import print_function # Python 2/3 compatibility
+import cv2 # Import the OpenCV library
+import numpy as np # Import Numpy library
 from scipy.spatial.transform import Rotation as R
-import math 
+import math # Math library
  
+# Project: ArUco Marker Pose Estimator
+# Date created: 12/21/2021
+# Python version: 3.8
  
 # Dictionary that was used to generate the ArUco marker
-aruco_dictionary_name = "DICT_ARUCO_ORIGINAL"
+aruco_dictionary_name = "DICT_7X7_50"
  
 # The different ArUco dictionaries built into the OpenCV library. 
 ARUCO_DICT = {
@@ -32,7 +42,7 @@ ARUCO_DICT = {
 }
  
 # Side length of the ArUco marker in meters 
-aruco_marker_side_length = 0.13
+aruco_marker_side_length = 0.03
  
 # Calibration parameters yaml file
 camera_calibration_parameters_filename = 'calibration_chessboard.yaml'
@@ -83,10 +93,7 @@ def main():
   this_aruco_parameters = cv2.aruco.DetectorParameters_create()
    
   # Start the video stream
-  cap = cv2.VideoCapture(0)
-  # Create a named window and set the window size
-  cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
-  cv2.resizeWindow('frame', 800, 600) # Width, Height
+  cap = cv2.VideoCapture(4)
    
   while(True):
   
