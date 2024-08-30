@@ -3,4 +3,4 @@ numpy
 torch
 torchvision
 torchaudio
-opencv-contrib-python==4.6.0.66
+opencv-contrib-python==4.8.1.78
